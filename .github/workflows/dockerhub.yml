@@ -1,0 +1,23 @@
+name: Publishing image to docker hub
+
+on:
+  push:
+    tag:
+      -'**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login into Docker Hub
+        uses: docker/login-action@v1
+        with: 
+          registry: docker.io
+          username: ${{secrets.DOCKER_HUB_USR}}
+          password: ${{secrets.DOCKER_HUB_PW}}
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and Push
+        run: |
+          docker build . --tag kallito92/anotherdemo:latest
+          docker push kallito92/anotherdemo:latest
